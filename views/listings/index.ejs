@@ -31,50 +31,55 @@
     display: flex;
     align-items: center;
   }
+  .filter.active {
+  opacity: 1;
+  border-bottom: 2px solid black;
+}
+
  </style>
 
     <div id="filters">
-      <div class="filter">
+      <div class="filter" data-category="all">
         <div><i class="fa-solid fa-fire"></i></div>
         <p>Trending</p>     
       </div>
-      <div class="filter">
+      <div class="filter" data-category="rooms">
         <div><i class="fa-solid fa-bed"></i></div>
         <p>Rooms</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="iconicCity">
         <div><i class="fa-solid fa-mountain-city"></i></div>
         <p>Iconic Cities</p>     
       </div>
-      <div class="filter">
+      <div class="filter" data-category="mountains">
         <div><i class="fa-solid fa-mountain"></i></div>
         <p>Mountains</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="castles">
         <div><i class="fa-brands fa-fort-awesome"></i></i></div>
         <p>Castles</p>     
       </div>
-      <div class="filter">
+      <div class="filter" data-category="amazingPools">
         <div><i class="fa-solid fa-person-swimming"></i></div>
         <p>Amazing Pools</p>
       </div>
-    <div class="filter">
+    <div class="filter" data-category="camping" >
         <div><i class="fa-solid fa-campground"></i></div>
         <p>Camping</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="farms">
         <div><i class="fa-solid fa-cow"></i></i></div>
         <p>Farms</p>     
       </div>
-      <div class="filter">
+      <div class="filter" data-category="arctic">
         <div><i class="fa-regular fa-snowflake"></i></div>
         <p>Arctic</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="domes">
         <div><i class="fa-solid fa-igloo"></i></i></div>
         <p>Domes</p>     
       </div>
-      <div class="filter">
+      <div class="filter" data-category="boats">
         <div><i class="fa-solid fa-ship"></i></div>
         <p>Boats</p>
       </div>
@@ -90,7 +95,7 @@
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(let listing of allListings) { %>
             <a href="/listings/<%= listing._id %>" class="listing-link">
-            <div class="card col listing-card">
+            <div class="card col listing-card" data-category="<%= listing.category %>">
                 <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;" >
                 <div class="card-img-overlay"></div>
                 <div class="card-body">
@@ -110,11 +115,31 @@
   taxSwitch.addEventListener("click", () => {
     let taxInfo = document.getElementsByClassName("tax-info");
     for (let info of taxInfo) {
-      if (info.style.display !== "inline") {
-        info.style.display = "inline";
-      } else {
-        info.style.display = "none";
-      }
+      info.style.display = (info.style.display !== "inline") ? "inline" : "none";
     }
   });
+
+// Catagory Filter
+  const filters = document.querySelectorAll('.filter');
+  const cards = document.querySelectorAll('.listing-card');
+
+  filters.forEach(filter => {
+    filter.addEventListener('click', () => {
+       filters.forEach(f => f.classList.remove('active')); // remove from all
+  filter.classList.add('active'); // add to clicked one
+      const selectedCategory = filter.getAttribute('data-category');
+
+      cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+
+        if (selectedCategory === 'all' || selectedCategory === cardCategory) {
+          card.parentElement.style.display = 'block'; // show card's parent anchor
+        } else {
+          card.parentElement.style.display = 'none';
+        }
+      });
+    });
+  });
+  //trigger "All" filter on initial load
+  document.querySelector('.filter[data-category="all"]').click();
 </script>

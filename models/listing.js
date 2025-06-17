@@ -1,5 +1,4 @@
 const mongoose =require("mongoose");
-const { ref } = require("joi");
 const Schema = mongoose.Schema;
 const Review = require("./review.js")
 
@@ -46,8 +45,14 @@ const listingSchema = new Schema({
             'camping',
             'amazingPools',
             'castles',
-            'iconicCity'],
+            'iconicCity',
+            'domes',
+            'boats',
+            'trending'
+        ],
+        required:true
     }
+    
 });
 
 listingSchema.post("findOneAndDelete",async (listing) => {
